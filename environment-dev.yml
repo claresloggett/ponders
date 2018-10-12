@@ -1,0 +1,17 @@
+name: sklearn-pandas-dev
+channels:
+  - conda-forge
+dependencies:
+ - scikit-learn=0.20.0
+ - pandas=0.23.4
+ - codecov
+ - coverage
+ - flake8
+ - pytest
+ - sphinx
+ - ipython
+ - matplotlib
+ - numpydoc
+ - sphinx_rtd_theme
+ - pip:
+   - sphinx-copybutton
