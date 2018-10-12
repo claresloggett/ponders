@@ -1,1 +1,4 @@
 # List required packages in this file, one per line.
+# dev dependencies in environment-dev.yml are a superset of these files.
+scikit-learn
+pandas

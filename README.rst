@@ -9,9 +9,9 @@ ponder
         :target: https://pypi.python.org/pypi/ponder
 
 
-A library to allow scikit-learn to elegantly handle Pandas DataFrames
+A library to allow scikit-learn to automatically handle Pandas DataFrames
 
-* Free software: 3-clause BSD license
+* Free software: MIT license
 * Documentation: (COMING SOON!) https://claresloggett.github.io/ponder.
 
 Features
