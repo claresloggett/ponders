@@ -367,8 +367,25 @@ Refer to the transform method documentation for functionality details.
 transform parameters are: {}
 '''
 
+predict_docstring = '''
+predict_df wraps the predict method, allowing X to be a pandas.DataFrame.
+This method returns a Series of class predictions.
+
+Refer to the predict method documentation for functionality details.
+predict parameters are: {}
+'''
+
+predict_log_proba_docstring = '''
+predict_log_proba_df wraps the predict_log_proba method, allowing X to be a pandas.DataFrame.
+This method returns a DataFrame of log-probabilities.
+
+Refer to the predict_log_proba method documentation for functionality details.
+predict_log_proba parameters are: {}
+'''
+
 predict_proba_docstring = '''
 predict_proba_df wraps the predict_proba method, allowing X to be a pandas.DataFrame.
+This method returns a DataFrame of probabilities.
 
 Refer to the predict_proba method documentation for functionality details.
 predict_proba parameters are: {}
@@ -537,6 +554,24 @@ def add_transform(model):
     model.transform_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.transform)))
 
 
+def add_predict(model):
+
+    def predict_df(self, X, **kwargs):
+        '''
+        predict_df method to be added to the model.
+        This docstring should be overwritten - if it's visible, please report a bug.
+        '''
+        encoded = encode_for_transform(self, X)
+        # TODO: encode with categorical matching input y?
+        # will already do classes based on classes_
+        result = self.predict(encoded, **kwargs)
+        return pd.Series(result, index=X.index)
+
+    model.predict_df = predict_df.__get__(model)
+    model.predict_df.__func__.__qualname__ = '.'.join(
+        model.predict.__qualname__.split('.')[:-1] + ['predict_df'])
+    model.predict_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict)))
+
 
 def add_predict_proba(model):
 
@@ -555,8 +590,23 @@ def add_predict_proba(model):
     model.predict_proba_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict_proba)))
 
 
-# We add feature_importances_df() method,
-# not feature_importances_df_ property!
+def add_predict_log_proba(model):
+
+    def predict_log_proba_df(self, X, **kwargs):
+        '''
+        predict_log_proba_df method to be added to the model.
+        This docstring should be overwritten - if it's visible, please report a bug.
+        '''
+        encoded = encode_for_transform(self, X)
+        result = self.predict_log_proba(encoded, **kwargs)
+        return pd.DataFrame(result, index=X.index, columns=self.classes_)
+
+    model.predict_log_proba_df = predict_log_proba_df.__get__(model)
+    model.predict_log_proba_df.__func__.__qualname__ = '.'.join(
+        model.predict_log_proba.__qualname__.split('.')[:-1] + ['predict_log_proba_df'])
+    model.predict_log_proba_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict_log_proba)))
+
+
 def add_feature_importances(model):
 
     def feature_importances_df(self):
@@ -607,9 +657,17 @@ def use_dataframes(model):
         print('Adding transform_df')
         add_transform(model)
 
+    if 'predict' in members:
+        print('Adding predict_df')
+        add_predict(model)
+
     if 'predict_proba' in members:
         print('Adding predict_proba_df')
         add_predict_proba(model)
+
+    if 'predict_log_proba' in members:
+        print('Adding predict_log_proba_df')
+        add_predict_log_proba(model)
 
     # feature_importances_ is a property
     # It is present before fitting but throws a NotFittedError
