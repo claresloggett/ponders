@@ -173,7 +173,7 @@ def one_hot_group(data, categories=None, expand_binary=False, base_category=None
             raise ValueError(
                 "Cannot encode data as categories in categorical field {}".format(name)
                 + " do not match expected categories."
-                + " If you used fit_df, you must set your training data Categorical dtype
+                + " If you used fit_df, you must set your training data Categorical dtype"
                 + " to have all expected category levels."
                 + " New categories were: {}".format(set(observed_categories)-set(categories)))
     else:
@@ -433,12 +433,11 @@ def encode_for_fit(model,
     return encoded
 
 
-def encode_for_transform(X, model):
+def encode_for_transform(model, X):
     '''
     Encode a dataframe as numerical values, using the same encoding as used
     in the fit.
     '''
-    # Here we don't use base_categories, just map_features
     encoded, _feature_mapping, _base_categories = encode(
         X,
         expand_binary=model.expand_binary,
@@ -529,7 +528,7 @@ def add_transform(model):
         transform_df method to be added to the model.
         This docstring should be overwritten - if it's visible, please report a bug.
         '''
-        encoded = encode_for_transform(X, self)
+        encoded = encode_for_transform(self, X)
         return self.transform(encoded, **kwargs)
 
     model.transform_df = transform_df.__get__(model)
@@ -546,7 +545,7 @@ def add_predict_proba(model):
         predict_proba_df method to be added to the model.
         This docstring should be overwritten - if it's visible, please report a bug.
         '''
-        encoded = encode_for_transform(X, self)
+        encoded = encode_for_transform(self, X)
         result = self.predict_proba(encoded, **kwargs)
         return pd.DataFrame(result, index=X.index, columns=self.classes_)
 
@@ -583,19 +582,20 @@ def add_feature_importances(model):
 
 def use_dataframes(model):
     """
-    Given an sklearn model object that implements any one or more of
-    fit, transform, fit_transform, predict, predict_proba, predict_log_proba, or score,
+    Given an sklearn model object that implements any one or more of:
+    - fit
+    - transform
+    - predict_proba
+    - feature_importances_
     return an object augmented with corresponding
     fit_df, transform_df etc methods
-    which operate on dataframes.
+    which operate on and return Pandas DataFrames and Series.
 
-    Auxilliary information needed to handle a fitted dataframe - i.e. column
+    Auxilliary information needed to handle a fitted dataframe - e.g. column
     (feature) names and binary encodings of categorical variables - are stored
-    in the fitted model instance. Dataframes to be transformed
-     and store
-    feature names and encodings inside the augmented object
+    in the fitted model instance.
 
-    These methods make use of DataFrame column dtypes, which must be set correctly.
+    These methods make use of the DataFrame column dtypes, which must be set correctly.
     """
     members = set([f for (f,obj) in inspect.getmembers(model)])
 
@@ -612,7 +612,7 @@ def use_dataframes(model):
         add_predict_proba(model)
 
     # feature_importances_ is a property
-    # it is present before fitting but throws a NotFittedError
+    # It is present before fitting but throws a NotFittedError
     # inspect ignores it due to this; use dir()
     if 'feature_importances_' in dir(model):
         print('Adding feature_importances_df')
