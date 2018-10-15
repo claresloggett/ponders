@@ -36,7 +36,7 @@ setup(
     name='ponder',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    description="A library to allow scikit-learn to elegantly handle Pandas DataFrames",
+    description="A library to allow scikit-learn to automatically handle Pandas DataFrames",
     long_description=readme,
     author="Clare Sloggett",
     author_email='claresloggett@gmail.com',
