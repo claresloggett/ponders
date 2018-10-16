@@ -247,10 +247,10 @@ def one_hot(data, categories=None, expand_binary=False, base_category=None,
 
 def one_hot_many(df,
                  expand_binary=False,
-                 base_categories={},
-                 grouped_columns={},
+                 base_categories=None,
+                 grouped_columns=None,
                  treat_missing_as_zero=False,
-                 map_features={}):
+                 map_features=None):
     """
     Given a dataframe containing all categorical columns,
     one-hot encode them all.
@@ -264,6 +264,13 @@ def one_hot_many(df,
     Any fields in these lists will be encoded as if they were one binary-encoded
     variable, with the union of their values treated as levels in the variable.
     """
+    if base_categories is None:
+        base_categories = {}
+    if grouped_columns is None:
+        grouped_columns = {}
+    if map_features is None:
+        map_features = {}
+
     grouped_inputs = set(sum(grouped_columns.values(),[]))
     for field in df.columns:
         if field not in grouped_inputs:
@@ -294,11 +301,11 @@ def one_hot_many(df,
 
 def encode(df,
            expand_binary=False,
-           base_categories={},
-           grouped_columns={},
+           base_categories=None,
+           grouped_columns=None,
            treat_missing_as_zero=False,
            drop_unhandled=False,
-           map_features={}):
+           map_features=None):
     """
     Encode columns of a dataframe numerically, according to their Series dtype.
     Return
@@ -404,8 +411,8 @@ Refer to the feature_importances_ property documentation for functionality detai
 def encode_for_fit(model,
                    X,
                    expand_binary=False,
-                   base_categories={},
-                   grouped_columns={},
+                   base_categories=None,
+                   grouped_columns=None,
                    treat_missing_as_zero=False,
                    drop_unhandled=False):
     '''
@@ -428,6 +435,8 @@ def encode_for_fit(model,
         base_categories=base_categories, grouped_columns=grouped_columns,
         drop_unhandled=drop_unhandled)
     model.expand_binary = expand_binary
+    if grouped_columns is None:
+        grouped_columns = {}
     model.grouped_columns = grouped_columns
     model.treat_missing_as_zero = treat_missing_as_zero
     model.drop_unhandled = drop_unhandled
@@ -475,8 +484,8 @@ def add_fit(model):
                    X,
                    y,
                    expand_binary=False,
-                   base_categories={},
-                   grouped_columns={},
+                   base_categories=None,
+                   grouped_columns=None,
                    treat_missing_as_zero=False,
                    drop_unhandled=False,
                    **kwargs):
@@ -496,8 +505,8 @@ def add_fit(model):
                    X,
                    y=parameters['y'].default,
                    expand_binary=False,
-                   base_categories={},
-                   grouped_columns={},
+                   base_categories=None,
+                   grouped_columns=None,
                    treat_missing_as_zero=False,
                    drop_unhandled=False,
                    **kwargs):
@@ -516,8 +525,8 @@ def add_fit(model):
         def fit_df(self,
                    X,
                    expand_binary=False,
-                   base_categories={},
-                   grouped_columns={},
+                   base_categories=None,
+                   grouped_columns=None,
                    treat_missing_as_zero=False,
                    drop_unhandled=False,
                    **kwargs):
