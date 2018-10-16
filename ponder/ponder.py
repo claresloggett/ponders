@@ -644,7 +644,9 @@ def use_dataframes(model):
     Given an sklearn model object that implements any one or more of:
     - fit
     - transform
+    - predict
     - predict_proba
+    - predict_log_proba
     - feature_importances_
     return an object augmented with corresponding
     fit_df, transform_df etc methods
