@@ -1,9 +1,10 @@
-name: sklearn-pandas-dev
+name: ponder-dev
 channels:
   - conda-forge
 dependencies:
  - scikit-learn=0.20.0
  - pandas=0.23.4
+ - numpy=1.15.2
  - codecov
  - coverage
  - flake8

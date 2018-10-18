@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import inspect
-from functools import update_wrapper
+
 
 # via stackoverflow and blog post... from Mark Byers / Jeff Atwood (?)
 def sorted_alphanumeric(l, reverse=False):
