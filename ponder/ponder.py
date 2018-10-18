@@ -9,14 +9,16 @@ def sorted_alphanumeric(l, reverse=False):
     """
     Sorts the given iterable alphanumerically.
     If values are numeric, sort numerically; if strings, alphanumerically.
-    If string operations don't work we just sort normally; this works for numeric types.
+    If string operations don't work we just sort normally; this works for
+    numeric types.
     """
     try:
         convert = lambda text: int(text) if text.isdigit() else text
         alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-        return sorted(l, key = alphanum_key, reverse=reverse)
+        return sorted(l, key=alphanum_key, reverse=reverse)
     except TypeError:
         return sorted(l, reverse=reverse)
+
 
 def guess_positive(categories):
     # try to guess which category should be 1 (vs 0)
@@ -294,7 +296,9 @@ def one_hot_many(df,
         feature_mapping[fieldname] = list(categories)
         base_categories_used[fieldname] = base_category # may be none
 
-    return (pd.concat(encoded_list, axis=1), feature_mapping, base_categories_used)
+    return (pd.concat(encoded_list, axis=1),
+            feature_mapping,
+            base_categories_used)
 
 
 # datetimes are not yet handled
@@ -341,7 +345,8 @@ def encode(df,
     if len(date_columns) > 0:
         print("Warning: dates not yet handled by encoding: {}".format(date_columns))
 
-    encoded_columns = set.union(set(category_columns),set(numeric_columns),set(date_columns))
+    encoded_columns = set.union(
+        set(category_columns),set(numeric_columns),set(date_columns))
     unhandled_columns = list(set(df.columns) - encoded_columns)
     if len(unhandled_columns) > 0:
         print("Warning: some column types were not recognised during encoding: {}".format(unhandled_columns))
@@ -491,7 +496,8 @@ def add_fit(model):
                    **kwargs):
             '''
             fit_df method to be added to the model.
-            This docstring should be overwritten - if it's visible, please report a bug.
+            This docstring should be overwritten - if it's visible,
+            please report a bug.
             '''
             encoded = encode_for_fit(self, X, expand_binary=expand_binary,
                 base_categories=base_categories, grouped_columns=grouped_columns,
@@ -512,7 +518,8 @@ def add_fit(model):
                    **kwargs):
             '''
             fit_df method to be added to the model.
-            This docstring should be overwritten - if it's visible, please report a bug.
+            This docstring should be overwritten - if it's visible,
+            please report a bug.
             '''
             encoded = encode_for_fit(self, X, expand_binary=expand_binary,
                 base_categories=base_categories, grouped_columns=grouped_columns,
@@ -532,7 +539,8 @@ def add_fit(model):
                    **kwargs):
             '''
             fit_df method to be added to the model.
-            This docstring should be overwritten - if it's visible, please report a bug.
+            This docstring should be overwritten - if it's visible,
+            please report a bug.
             '''
             encoded = encode_for_fit(self, X, expand_binary=expand_binary,
                 base_categories=base_categories, grouped_columns=grouped_columns,
@@ -543,7 +551,8 @@ def add_fit(model):
     model.fit_df = fit_df.__get__(model)
     model.fit_df.__func__.__qualname__ = '.'.join(
         model.fit.__qualname__.split('.')[:-1] + ['fit_df'])
-    model.fit_df.__func__.__doc__ = fit_docstring.format(str(inspect.signature(model.fit)))
+    model.fit_df.__func__.__doc__ = fit_docstring.format(
+        str(inspect.signature(model.fit)))
     # if preserving original docstring would add model.fit.__doc__
 
 
@@ -552,7 +561,8 @@ def add_transform(model):
     def transform_df(self, X, **kwargs):
         '''
         transform_df method to be added to the model.
-        This docstring should be overwritten - if it's visible, please report a bug.
+        This docstring should be overwritten - if it's visible,
+        please report a bug.
         '''
         encoded = encode_for_transform(self, X)
         return self.transform(encoded, **kwargs)
@@ -560,7 +570,8 @@ def add_transform(model):
     model.transform_df = transform_df.__get__(model)
     model.transform_df.__func__.__qualname__ = '.'.join(
         model.transform.__qualname__.split('.')[:-1] + ['transform_df'])
-    model.transform_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.transform)))
+    model.transform_df.__func__.__doc__ = transform_docstring.format(
+        str(inspect.signature(model.transform)))
 
 
 def add_predict(model):
@@ -579,7 +590,8 @@ def add_predict(model):
     model.predict_df = predict_df.__get__(model)
     model.predict_df.__func__.__qualname__ = '.'.join(
         model.predict.__qualname__.split('.')[:-1] + ['predict_df'])
-    model.predict_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict)))
+    model.predict_df.__func__.__doc__ = transform_docstring.format(
+        str(inspect.signature(model.predict)))
 
 
 def add_predict_proba(model):
@@ -587,7 +599,8 @@ def add_predict_proba(model):
     def predict_proba_df(self, X, **kwargs):
         '''
         predict_proba_df method to be added to the model.
-        This docstring should be overwritten - if it's visible, please report a bug.
+        This docstring should be overwritten - if it's visible,
+        please report a bug.
         '''
         encoded = encode_for_transform(self, X)
         result = self.predict_proba(encoded, **kwargs)
@@ -595,8 +608,10 @@ def add_predict_proba(model):
 
     model.predict_proba_df = predict_proba_df.__get__(model)
     model.predict_proba_df.__func__.__qualname__ = '.'.join(
-        model.predict_proba.__qualname__.split('.')[:-1] + ['predict_proba_df'])
-    model.predict_proba_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict_proba)))
+        model.predict_proba.__qualname__.split('.')[:-1]
+        + ['predict_proba_df'])
+    model.predict_proba_df.__func__.__doc__ = transform_docstring.format(
+        str(inspect.signature(model.predict_proba)))
 
 
 def add_predict_log_proba(model):
@@ -612,8 +627,10 @@ def add_predict_log_proba(model):
 
     model.predict_log_proba_df = predict_log_proba_df.__get__(model)
     model.predict_log_proba_df.__func__.__qualname__ = '.'.join(
-        model.predict_log_proba.__qualname__.split('.')[:-1] + ['predict_log_proba_df'])
-    model.predict_log_proba_df.__func__.__doc__ = transform_docstring.format(str(inspect.signature(model.predict_log_proba)))
+        model.predict_log_proba.__qualname__.split('.')[:-1]
+        + ['predict_log_proba_df'])
+    model.predict_log_proba_df.__func__.__doc__ = transform_docstring.format(
+        str(inspect.signature(model.predict_log_proba)))
 
 
 def add_feature_importances(model):
@@ -621,7 +638,8 @@ def add_feature_importances(model):
     def feature_importances_df(self):
         '''
         feature_importances_df_ property to be added to the model.
-        This docstring should be overwritten - if it's visible, please report a bug.
+        This docstring should be overwritten - if it's visible,
+        please report a bug.
         '''
         raw_importances = pd.Series(self.feature_importances_, index=self.features_encoded)
         feature_positions = pd.Series(
@@ -656,9 +674,10 @@ def use_dataframes(model):
     (feature) names and binary encodings of categorical variables - are stored
     in the fitted model instance.
 
-    These methods make use of the DataFrame column dtypes, which must be set correctly.
+    These methods make use of the DataFrame column dtypes, which must be set
+    correctly.
     """
-    members = set([f for (f,obj) in inspect.getmembers(model)])
+    members = set([f for (f, obj) in inspect.getmembers(model)])
 
     if 'fit' in members:
         print('Adding fit_df')
