@@ -657,7 +657,7 @@ def add_feature_importances(model):
     model.feature_importances_df.__func__.__doc__ = feature_importances_docstring
 
 
-def use_dataframes(model):
+def use_dataframes(model, silent=False):
     """
     Given an sklearn model object that implements any one or more of:
     - fit
@@ -680,30 +680,36 @@ def use_dataframes(model):
     members = set([f for (f, obj) in inspect.getmembers(model)])
 
     if 'fit' in members:
-        print('Adding fit_df')
+        if not silent:
+            print('Adding fit_df')
         add_fit(model)
 
     if 'transform' in members:
-        print('Adding transform_df')
+        if not silent:
+            print('Adding transform_df')
         add_transform(model)
 
     if 'predict' in members:
-        print('Adding predict_df')
+        if not silent:
+            print('Adding predict_df')
         add_predict(model)
 
     if 'predict_proba' in members:
-        print('Adding predict_proba_df')
+        if not silent:
+            print('Adding predict_proba_df')
         add_predict_proba(model)
 
     if 'predict_log_proba' in members:
-        print('Adding predict_log_proba_df')
+        if not silent:
+            print('Adding predict_log_proba_df')
         add_predict_log_proba(model)
 
     # feature_importances_ is a property
     # It is present before fitting but throws a NotFittedError
     # inspect ignores it due to this; use dir()
     if 'feature_importances_' in dir(model):
-        print('Adding feature_importances_df')
+        if not silent:
+            print('Adding feature_importances_df')
         add_feature_importances(model)
 
     return model
