@@ -635,7 +635,7 @@ def add_predict_log_proba(model):
 
 def add_feature_importances(model):
 
-    def feature_importances_df(self):
+    def feature_importances_df(self, sum_of_squares=True):
         '''
         feature_importances_df_ property to be added to the model.
         This docstring should be overwritten - if it's visible,
@@ -645,7 +645,14 @@ def add_feature_importances(model):
         feature_positions = pd.Series(
             [self.feature_lookup[feature] for feature in self.features_encoded],
             index = self.features_encoded)
-        original_importances = np.sqrt((raw_importances**2).groupby(feature_positions).sum())
+        if sum_of_squares:
+            # Combine categoricals with sqrt sum of squares, then normalise
+            original_importances = np.sqrt((raw_importances**2).groupby(feature_positions).sum())
+            original_importances /= original_importances.sum()
+        else:
+            # Just sum linearly
+            original_importances = raw_importances.groupby(feature_positions).sum()
+
         # sort by original feature order
         original_importances = original_importances[self.features_original]
         return original_importances
