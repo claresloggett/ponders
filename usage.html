@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; ponder 0.1.0.post2.dev0+g060fa44 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" type="text/css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Release History" href="release-history.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ponder
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0.post2.dev0+g060fa44
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-history.html">Release History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ponder</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>This documentation is preliminary and only a usage outline exists.</p>
+<p>The main function in ponder is <code class="xref py py-func docutils literal notranslate"><span class="pre">use_dataframes()</span></code>.
+This function binds extra methods to a scikit-learn model instance,
+allowing it to easily handle Pandas DataFrames. ponder takes advantage of scikit-learn’s consistent API interface, and Pandas’ column dtypes.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ponder</span> <span class="kn">import</span> <span class="n">use_dataframes</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">use_dataframes</span><span class="p">(</span><span class="n">PCA</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">pca</span></code> object will now have a <code class="xref py py-func docutils literal notranslate"><span class="pre">fit_df()</span></code> method, a <code class="xref py py-func docutils literal notranslate"><span class="pre">transform_df()</span></code> method, etc. These methods automatically encode the columns of a DataFrame according to their dtype, so that they can be treated as numeric. For instance, categorical fields will be binary/one-hot encoded.</p>
+<p>Detailed documentation for the extra functions added by <code class="xref py py-func docutils literal notranslate"><span class="pre">use_dataframes()</span></code>
+is TBD. Currently we add, whenever the underlying functions exist:</p>
+<ul class="simple">
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_df()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">transform_df()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">predict_df()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">predict_proba_df()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">predict_log_proba_df()</span></code></li>
+<li><code class="xref py py-func docutils literal notranslate"><span class="pre">feature_importances_df()</span></code> (note that this wraps the <code class="xref py py-attr docutils literal notranslate"><span class="pre">feature_importances_</span></code> property, but is a method rather than a property).</li>
+</ul>
+<p>Currently, dtypes handled sensibly are:</p>
+<ul class="simple">
+<li>numeric: left as they are</li>
+<li>categorical, boolean and object/string: binary (one-hot) encoded. Category levels are respected if the dtype is category.</li>
+</ul>
+<p>Datetimes are not yet handled.</p>
+<p>Remaining parts of the scikit-learn API are in progress - please create a github issue if you would like particular features to be prioritised.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="release-history.html" class="btn btn-neutral float-right" title="Release History" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Clare Sloggett
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/copybutton.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
