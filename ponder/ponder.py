@@ -291,6 +291,7 @@ def one_hot_many(df,
             treat_missing_as_zero=treat_missing_as_zero,
             categories=map_features.get(fieldname,None),
             base_category=base_categories.get(fieldname,None),
+            expand_binary=expand_binary,
             name=fieldname)
         encoded_list.append(encoded_field)
         feature_mapping[fieldname] = list(categories)

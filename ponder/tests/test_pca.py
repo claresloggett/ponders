@@ -49,13 +49,13 @@ random1_transformed = np.array([[-38.34958244355476, -15.61979023856738, 0.12410
 
 def test_fit():
     df = parse_test_df(StringIO(random1))
-    pca = use_dataframes(PCA(10))
+    pca = use_dataframes(PCA(10), silent=True)
     pca.fit_df(df)
     assert np.all(np.isclose(pca.components_,random1_components))
 
 def test_transform():
     df = parse_test_df(StringIO(random1))
-    pca = use_dataframes(PCA(10))
+    pca = use_dataframes(PCA(10), silent=True)
     pca.fit_df(df)
     transformed = pca.transform_df(df)
     assert np.all(np.isclose(transformed,random1_transformed))
