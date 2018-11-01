@@ -4,6 +4,8 @@
 # TODO: loop over some datasets
 #  include datasets with grouped column levels
 
+import pytest
+
 from io import StringIO
 #import numpy as np
 
@@ -87,46 +89,67 @@ random1_basecats_bases = {
     'Boolean': False, 'Binary': 'No', 'Ordinal': None,
     'Nominal': None, 'Nominal2': 'Negative'}
 
-def test_encode_basics():
+
+# Test sets and tests
+
+basics_tests = [
+    (random1, random1_basic_columns, random1_basic_mapping,
+    random1_basic_bases)]
+
+@pytest.mark.parametrize("df_str,exp_columns,exp_mapping,exp_bases",
+        basics_tests)
+def test_encode_basics(df_str, exp_columns, exp_mapping, exp_bases):
     '''
     Test encode with the simplest possible settings:
     all fields as columns (so expand_binary=True and no base categories),
     no grouped columns.
     '''
-    df = parse_test_df(StringIO(random1))
+    df = parse_test_df(StringIO(df_str))
     # add an unobserved category to one variable
     df['Nominal'].cat.set_categories(['Red', 'Yellow', 'Green', 'Purple'],
                                  inplace=True)
     encoded, mapping, bases = encode(df, expand_binary=True)
-    assert set(encoded.columns)==set(random1_basic_columns)
-    assert mapping==random1_basic_mapping
-    assert bases==random1_basic_bases
+    assert set(encoded.columns)==set(exp_columns)
+    assert mapping==exp_mapping
+    assert bases==exp_bases
 
 
-def test_encode_noexpand():
+noexpand_tests = [
+    (random1, random1_noexpand_columns, random1_noexpand_mapping,
+    random1_noexpand_bases)]
+
+@pytest.mark.parametrize("df_str,exp_columns,exp_mapping,exp_bases",
+        noexpand_tests)
+def test_encode_noexpand(df_str, exp_columns, exp_mapping, exp_bases):
     '''
     Test encode with expand_binary=False (the default).
     '''
-    df = parse_test_df(StringIO(random1))
+    df = parse_test_df(StringIO(df_str))
     # add an unobserved category to one variable
     df['Nominal'].cat.set_categories(['Red', 'Yellow', 'Green', 'Purple'],
                                       inplace=True)
     encoded, mapping, bases = encode(df, expand_binary=False)
-    assert set(encoded.columns)==set(random1_noexpand_columns)
-    assert mapping==random1_noexpand_mapping
-    assert bases==random1_noexpand_bases
+    assert set(encoded.columns)==set(exp_columns)
+    assert mapping==exp_mapping
+    assert bases==exp_bases
 
 
-def test_encode_basecategories():
+basecategories_tests = [
+    (random1, random1_basecats_columns, random1_basecats_mapping,
+    random1_basecats_bases)]
+
+@pytest.mark.parametrize("df_str,exp_columns,exp_mapping,exp_bases",
+        basecategories_tests)
+def test_encode_basecategories(df_str, exp_columns, exp_mapping, exp_bases):
     '''
-    Test encode with base categories.
+    Test encode with base categories, and default expand_binary=False.
     '''
-    df = parse_test_df(StringIO(random1))
+    df = parse_test_df(StringIO(df_str))
     # add an unobserved category to one variable
     df['Nominal'].cat.set_categories(['Red', 'Yellow', 'Green', 'Purple'],
                                       inplace=True)
     encoded, mapping, bases = encode(df,
                         base_categories={'Nominal2':'Negative'})
-    assert set(encoded.columns)==set(random1_basecats_columns)
-    assert mapping==random1_basecats_mapping
-    assert bases==random1_basecats_bases
+    assert set(encoded.columns)==set(exp_columns)
+    assert mapping==exp_mapping
+    assert bases==exp_bases
