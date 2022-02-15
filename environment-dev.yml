@@ -1,4 +1,4 @@
-name: ponder-dev
+name: ponders-dev
 channels:
   - conda-forge
 dependencies:
