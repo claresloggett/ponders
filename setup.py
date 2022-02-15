@@ -9,7 +9,7 @@ import versioneer
 # and/or pip.
 if sys.version_info < (3, 6):
     error = """
-ponder does not support Python {0}.{2}.
+ponders does not support Python {0}.{2}.
 Python 3.6 and above is required. Check your Python version like so:
 
 python3 --version
@@ -33,7 +33,7 @@ with open(path.join(here, 'requirements.txt')) as requirements_file:
 
 
 setup(
-    name='ponder',
+    name='ponders',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="A library to allow scikit-learn to automatically handle Pandas DataFrames",
@@ -49,7 +49,7 @@ setup(
         },
     include_package_data=True,
     package_data={
-        'ponder': [
+        'ponders': [
             # When adding files here, remember to update MANIFEST.in as well,
             # or else they will not be included in the distribution on PyPI!
             # 'path/to/data_file',
