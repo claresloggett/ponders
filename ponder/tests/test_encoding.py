@@ -148,8 +148,10 @@ def test_encode_basecategories(df_str, exp_columns, exp_mapping, exp_bases):
     # add an unobserved category to one variable
     df['Nominal'].cat.set_categories(['Red', 'Yellow', 'Green', 'Purple'],
                                       inplace=True)
+    # set Nominal2 base, and add an irrelevant, unused base
     encoded, mapping, bases = encode(df,
-                        base_categories={'Nominal2':'Negative'})
+                        base_categories={'Nominal2':'Negative',
+                                         'Irrelevant':'Neg'})
     assert set(encoded.columns)==set(exp_columns)
     assert mapping==exp_mapping
     assert bases==exp_bases
